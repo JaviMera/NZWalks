@@ -20,7 +20,7 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllRegions()
+        public async Task<IActionResult> GetAllRegionsAsync()
         {
             try
             {
@@ -37,7 +37,8 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("{regionId:guid}")]
-        public async Task<IActionResult> GetRegion(Guid regionId)
+        [ActionName("GetRegionAsync")]
+        public async Task<IActionResult> GetRegionAsync(Guid regionId)
         {
             try
             {
@@ -49,6 +50,24 @@ namespace NZWalks.API.Controllers
             catch (NullReferenceException ex)
             {
                 return NotFound("Region not found");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRegionAsync(AddRegionDto regionDto)
+        {
+            try
+            {
+                var regionDomain = _mapper.Map<Region>(regionDto);
+                var newRegion = await _regionsRepository.AddAsync(regionDomain);
+
+                var newRegionDto = _mapper.Map<RegionDto>(newRegion);
+
+                return CreatedAtAction(nameof(GetRegionAsync), new { regionId = newRegionDto.Id }, newRegionDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

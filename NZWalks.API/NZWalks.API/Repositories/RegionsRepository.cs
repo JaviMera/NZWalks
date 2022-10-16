@@ -13,6 +13,14 @@ namespace NZWalks.API.Repositories
             _context = context; ;
         }
 
+        public async Task<Region> AddAsync(Region region)
+        {
+            region.Id = Guid.NewGuid();
+            await _context.Regions.AddAsync(region);
+            _context.SaveChanges();            
+            return region;
+        }
+
         public async Task<IEnumerable<Region>> GetAllAsync()
         {
             return await _context.Regions.ToListAsync() ?? throw new NullReferenceException("Regions not found.");

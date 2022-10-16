@@ -10,6 +10,10 @@ namespace NZWalks.API.Profiles
         {
             CreateMap<Region, RegionDto>()
                 .ReverseMap();
+            
+            CreateMap<Region, AddRegionDto>()                
+                .ReverseMap()
+                .ForMember(x => x.Id, opt => opt.Ignore());
         }
     }
 }
