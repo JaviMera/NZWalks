@@ -15,7 +15,12 @@ namespace NZWalks.API.Repositories
 
         public async Task<IEnumerable<Region>> GetAllAsync()
         {
-            return await _context.Regions.ToListAsync();
+            return await _context.Regions.ToListAsync() ?? throw new NullReferenceException("Regions not found.");
+        }
+
+        public async Task<Region> GetAsync(Guid regionId)
+        {
+            return await _context.Regions.FirstOrDefaultAsync(region => region.Id == regionId) ?? throw new NullReferenceException("Region not found.");
         }
     }
 }
