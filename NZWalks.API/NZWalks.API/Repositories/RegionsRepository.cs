@@ -17,7 +17,27 @@ namespace NZWalks.API.Repositories
         {
             region.Id = Guid.NewGuid();
             await _context.Regions.AddAsync(region);
-            _context.SaveChanges();            
+            await _context.SaveChangesAsync();            
+            return region;
+        }
+
+        public async Task<Region> DeleteAsync(Guid regionId)
+        {
+            var region = await _context.Regions.FirstOrDefaultAsync(region => region.Id == regionId);
+
+            if(region == null)
+            {
+                throw new NullReferenceException("Region not found.");
+            }
+
+            _context.Regions.Remove(region);
+            var result = await _context.SaveChangesAsync();
+
+            if(result <= 0)
+            {
+                throw new Exception("Unable to delete region.");
+            }
+
             return region;
         }
 

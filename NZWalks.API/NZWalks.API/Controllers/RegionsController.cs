@@ -70,5 +70,26 @@ namespace NZWalks.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("{regionId:guid}")]
+        public async Task<IActionResult> DeleteRegionAsync(Guid regionId)
+        {
+            try
+            {
+                var regionDeleted = await _regionsRepository.DeleteAsync(regionId);
+                var regionDeletedDto = _mapper.Map<RegionDto>(regionDeleted);
+
+                return Ok(regionDeletedDto);
+            }
+            catch(NullReferenceException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
