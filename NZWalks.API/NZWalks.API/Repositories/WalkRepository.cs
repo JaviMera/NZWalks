@@ -16,5 +16,15 @@ namespace NZWalks.API.Repositories
         {
             return await _context.Walks.Include(x => x.Region).Include(x => x.WalkDifficulty).ToListAsync();
         }
+
+        public async Task<Walk> GetAsync(Guid walkId)
+        {
+            var walk = await _context.Walks
+                .Include(x => x.WalkDifficulty)
+                .Include(x => x.Region)
+                .FirstOrDefaultAsync(x => x.Id == walkId) ?? throw new NullReferenceException("Walk not found.");
+
+            return walk;
+        }
     }
 }
