@@ -50,5 +50,20 @@ namespace NZWalks.API.Repositories
         {
             return await _context.Regions.FirstOrDefaultAsync(region => region.Id == regionId) ?? throw new NullReferenceException("Region not found.");
         }
+
+        public async Task<Region> UpdateAsync(Guid id, Region region)
+        {
+            var regionToUpdate = await _context.Regions.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NullReferenceException();
+
+            regionToUpdate.Code = region.Code;
+            regionToUpdate.Area = region.Area;
+            regionToUpdate.Name = region.Name;
+            regionToUpdate.Population = region.Population;
+            regionToUpdate.Lat = region.Lat;
+            regionToUpdate.Long = region.Long;
+
+            await _context.SaveChangesAsync();            
+            return regionToUpdate;
+        }
     }
 }

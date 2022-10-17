@@ -89,6 +89,30 @@ namespace NZWalks.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }            
+        }
+
+        [HttpPut]
+        [Route("{regionId:guid}")]
+        public async Task<IActionResult> UpdateRegionAsync(Guid regionId, [FromBody] UpdateRegionDto region)
+        {
+            try
+            {
+                var regionDomain = _mapper.Map<Region>(region);
+
+                var updatedRegionDomain = await _regionsRepository.UpdateAsync(regionId, regionDomain);
+
+                var updatedRegionDto = _mapper.Map<UpdateRegionDto>(updatedRegionDomain);
+
+                return Ok(updatedRegionDto);
+            }
+            catch (NullReferenceException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }
