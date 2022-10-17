@@ -25,13 +25,16 @@ namespace NZWalks.API.Controllers
             try
             {
                 var regionsDomain = await _regionsRepository.GetAllAsync();
-                var regions = _mapper.Map<IList<RegionDto>>(regionsDomain);
 
+                if (!regionsDomain.Any())
+                    return NoContent();
+
+                var regions = _mapper.Map<IList<RegionDto>>(regionsDomain);
                 return Ok(regions);
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
-                return NotFound("Regions not found");
+                return StatusCode(500, ex.Message);
             }
         }
 
