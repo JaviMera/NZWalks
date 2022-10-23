@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
 using NZWalks.API.Repositories;
 
@@ -40,6 +41,7 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("{walkId:guid}")]
+        [ActionName("GetWalkAsync")]
         public async Task<IActionResult> GetWalkAsync(Guid walkId)
         {
             try
@@ -50,9 +52,28 @@ namespace NZWalks.API.Controllers
 
                 return Ok(walkDto);
             }
-            catch(NullReferenceException ex)
+            catch (NullReferenceException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddWalkAsync([FromBody] AddWalkDto walktDo)
+        {
+            try
+            {
+                var walkDomain = _mapper.Map<Walk>(walktDo);
+
+                var newWalkDomain = await _walkRepository.AddWalkAsync(walkDomain);
+
+                var newWalkDto = _mapper.Map<WalkDto>(newWalkDomain);
+
+                return CreatedAtAction(nameof(GetWalkAsync), new { walkId = newWalkDto.Id }, newWalkDto);
             }
             catch (Exception ex)
             {

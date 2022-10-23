@@ -8,7 +8,7 @@
         public Guid WalkDifficultyId { get; set; }
 
         // Navigation Properties
-        public Region Region { get; set; } = new Region();
-        public WalkDifficulty WalkDifficulty { get; set; } = new WalkDifficulty();
+        public Region? Region { get; set; } = null;
+        public WalkDifficulty? WalkDifficulty { get; set; } = null;
     }
 }

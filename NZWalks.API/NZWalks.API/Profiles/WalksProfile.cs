@@ -9,10 +9,17 @@ namespace NZWalks.API.Profiles
         public WalksProfile()
         {
             CreateMap<Walk, WalkDto>()
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(x => x.Id, options => options.Ignore());                
 
             CreateMap<WalkDifficulty, WalkDifficultyDto>()
                 .ReverseMap();
+
+            CreateMap<Walk, AddWalkDto>()
+                .ReverseMap()
+                .ForMember(x => x.Id, options => options.Ignore())
+                .ForMember(x => x.WalkDifficulty, options => options.Ignore())
+                .ForMember(x => x.Region, options => options.Ignore());
         }
     }
 }

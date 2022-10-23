@@ -12,6 +12,15 @@ namespace NZWalks.API.Repositories
             _context = context;
         }
 
+        public async Task<Walk> AddWalkAsync(Walk walk)
+        {
+            walk.Id = Guid.NewGuid();
+            await _context.Walks.AddAsync(walk);
+            await _context.SaveChangesAsync();
+
+            return walk;
+        }
+
         public async Task<IEnumerable<Walk>> GetAllAsync()
         {
             return await _context.Walks.Include(x => x.Region).Include(x => x.WalkDifficulty).ToListAsync();
