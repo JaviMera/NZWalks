@@ -80,5 +80,27 @@ namespace NZWalks.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPut]
+        [Route("{walkId:guid}")]
+        public async Task<IActionResult> UpdateWalkAsyn(Guid walkId, [FromBody] UpdateWalkDto updateWalkDto)
+        {
+            try
+            {
+                var walkToUpdate = _mapper.Map<Walk>(updateWalkDto);
+                var updatedWalk = await _walkRepository.UpdateWalkAsync(walkId, walkToUpdate);
+                var updatedWalkDto = _mapper.Map<UpdateWalkDto>(updatedWalk);
+
+                return Ok(updatedWalkDto);                
+            }
+            catch (NullReferenceException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch(Exception exception)
+            {
+                return StatusCode(500, exception.Message);
+            }
+        }
     }
 }

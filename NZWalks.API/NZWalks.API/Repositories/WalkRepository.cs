@@ -35,5 +35,18 @@ namespace NZWalks.API.Repositories
 
             return walk;
         }
+
+        public async Task<Walk> UpdateWalkAsync(Guid walkId, Walk walk)
+        {
+            var walkToUpdate = await _context.Walks.FirstOrDefaultAsync(x => x.Id == walkId) ?? throw new NullReferenceException("Unable to find walk.");
+            
+            walkToUpdate.Length = walk.Length;
+            walkToUpdate.Name = walk.Name;
+            walkToUpdate.WalkDifficultyId = walk.WalkDifficultyId;
+            walkToUpdate.RegionId = walk.RegionId;
+            await _context.SaveChangesAsync();
+
+            return walkToUpdate;
+        }
     }
 }

@@ -10,12 +10,20 @@ namespace NZWalks.API.Profiles
         {
             CreateMap<Walk, WalkDto>()
                 .ReverseMap()
-                .ForMember(x => x.Id, options => options.Ignore());                
+                .ForMember(x => x.Id, options => options.Ignore())
+                .ForMember(x => x.WalkDifficulty, options => options.Ignore())
+                .ForMember(x => x.Region, options => options.Ignore());
 
             CreateMap<WalkDifficulty, WalkDifficultyDto>()
                 .ReverseMap();
 
             CreateMap<Walk, AddWalkDto>()
+                .ReverseMap()
+                .ForMember(x => x.Id, options => options.Ignore())
+                .ForMember(x => x.WalkDifficulty, options => options.Ignore())
+                .ForMember(x => x.Region, options => options.Ignore());
+
+            CreateMap<Walk, UpdateWalkDto>()
                 .ReverseMap()
                 .ForMember(x => x.Id, options => options.Ignore())
                 .ForMember(x => x.WalkDifficulty, options => options.Ignore())
