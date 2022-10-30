@@ -40,6 +40,24 @@ namespace NZWalks.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{walkDifficultyId:guid}")]
+        [ActionName("GetWalkDifficultyAsync")]
+        public async Task<IActionResult> GetWalkDifficultyAsync(Guid walkDifficultyId)
+        {
+            try
+            {
+                var walkDifficulty = await _repository.GetWalkDifficultyAsync(walkDifficultyId);
+                var walkDifficultyDto = _mapper.Map<WalkDifficultyDto>(walkDifficulty);
+
+                return Ok(walkDifficultyDto);
+            }
+            catch (Exception exception)
+            {
+                return StatusCode(500, exception.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddWalkDifficultyAsync([FromBody] AddWalktDifficultyDto addWalktDifficultyDto)
         {
@@ -49,7 +67,7 @@ namespace NZWalks.API.Controllers
                 var newWalkDifficulty = await _repository.AddWalkDifficulty(walkDifficultyDomain);
                 var newWalkDifficultyDto = _mapper.Map<WalkDifficultyDto>(newWalkDifficulty);
 
-                return Ok(newWalkDifficultyDto);
+                return CreatedAtAction(nameof(GetWalkDifficultyAsync), new { walkDifficultyId = newWalkDifficultyDto.Id }, newWalkDifficultyDto);                
             }
             catch (Exception exception)
             {
