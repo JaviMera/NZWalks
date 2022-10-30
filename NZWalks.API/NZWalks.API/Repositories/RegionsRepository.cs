@@ -10,7 +10,7 @@ namespace NZWalks.API.Repositories
 
         public RegionsRepository(NZWalksDbContext context)
         {
-            _context = context; ;
+            _context = context;
         }
 
         public async Task<Region> AddAsync(Region region)
