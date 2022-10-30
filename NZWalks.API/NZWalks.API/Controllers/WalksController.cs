@@ -102,5 +102,26 @@ namespace NZWalks.API.Controllers
                 return StatusCode(500, exception.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("{walkId:guid}")]
+        public async Task<IActionResult> DeleteWalkAsync(Guid walkId)
+        {
+            try
+            {
+                var walkDeleted = await _walkRepository.DeleteWalkAsync(walkId);
+                var walkDeletedDto = _mapper.Map<WalkDto>(walkDeleted);
+
+                return Ok(walkDeletedDto);
+            }
+            catch (NullReferenceException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

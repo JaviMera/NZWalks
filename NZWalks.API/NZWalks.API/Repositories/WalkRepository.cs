@@ -21,6 +21,26 @@ namespace NZWalks.API.Repositories
             return walk;
         }
 
+        public async Task<Walk> DeleteWalkAsync(Guid walkid)
+        {
+            var walk = await _context.Walks.FirstOrDefaultAsync(walk => walk.Id == walkid);
+
+            if (walk == null)
+            {
+                throw new NullReferenceException("Walk not found.");
+            }
+
+            _context.Walks.Remove(walk);
+            var result = await _context.SaveChangesAsync();
+
+            if (result <= 0)
+            {
+                throw new Exception("Unable to delete walk.");
+            }
+
+            return walk;
+        }
+
         public async Task<IEnumerable<Walk>> GetAllAsync()
         {
             return await _context.Walks.Include(x => x.Region).Include(x => x.WalkDifficulty).ToListAsync();
