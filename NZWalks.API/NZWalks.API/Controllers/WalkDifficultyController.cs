@@ -25,6 +25,12 @@ namespace NZWalks.API.Controllers
             try
             {
                 var walkDifficulties = await _repository.GetAllAsync();
+
+                if (!walkDifficulties.Any())
+                {
+                    return NotFound("There are no walk difficulties found.");
+                }
+
                 var walkDifficultiesDto = _mapper.Map<IEnumerable<WalkDifficultyDto>>(walkDifficulties);
                 return Ok(walkDifficultiesDto);
             }
