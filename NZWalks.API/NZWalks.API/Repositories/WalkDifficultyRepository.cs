@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NZWalks.API.Controllers;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
+using NZWalks.API.Models.DTO;
 
 namespace NZWalks.API.Repositories
 {
@@ -23,14 +25,28 @@ namespace NZWalks.API.Repositories
             return walkDifficulty;
         }
 
+        public async Task<WalkDifficulty> DeleteWalkDifficultyAsync(Guid walkDifficultyId)
+        {
+            var walkDifficultyToDelete = await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == walkDifficultyId);
+
+            if(walkDifficultyToDelete == null)
+            {
+                throw new NullReferenceException("Unable to find Walk Difficulty.");
+            }
+
+            _context.Remove(walkDifficultyToDelete);
+            await _context.SaveChangesAsync();
+            return walkDifficultyToDelete;
+        }
+
         public async Task<IEnumerable<WalkDifficulty>> GetAllAsync()
         {
             return await _context.WalksDifficulty.ToListAsync();
         }
 
-        public async Task<WalkDifficulty> GetWalkDifficultyAsync(Guid guid)
+        public async Task<WalkDifficulty> GetWalkDifficultyAsync(Guid walkDifficultyId)
         {
-            return await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == guid) ?? throw new NullReferenceException("Walk Difficulty not found.");
+            return await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == walkDifficultyId) ?? throw new NullReferenceException("Walk Difficulty not found.");
         }
     }
 }
