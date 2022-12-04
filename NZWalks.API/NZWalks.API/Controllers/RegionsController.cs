@@ -57,11 +57,53 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRegionAsync(AddRegionDto regionDto)
+        public async Task<IActionResult> AddRegionAsync(AddRegionDto addRegionDto)
         {
             try
             {
-                var regionDomain = _mapper.Map<Region>(regionDto);
+                // Validate request
+                if(addRegionDto == null)
+                {
+                    ModelState.AddModelError(nameof(addRegionDto), "Add Region Data is required.");
+                    return BadRequest(ModelState);
+                }
+
+                if (string.IsNullOrWhiteSpace(addRegionDto.Code))
+                {
+                    var nameOfCode = nameof(addRegionDto.Code);
+                    ModelState.AddModelError(nameOfCode, $"{nameOfCode} cannot be empty.");
+                }
+
+                if (addRegionDto.Area <= 0)
+                {
+                    var nameOfArea = nameof(addRegionDto.Area);
+                    ModelState.AddModelError(nameOfArea, $"{nameOfArea} cannot be less than or equal to zero.");
+                }
+
+                if (addRegionDto.Lat <= 0)
+                {
+                    var nameOfLat = nameof(addRegionDto.Lat);
+                    ModelState.AddModelError(nameOfLat, $"{nameOfLat} cannot be less than or equal to zero.");
+                }
+
+                if (addRegionDto.Long <= 0)
+                {
+                    var nameOfLong = nameof(addRegionDto.Long);
+                    ModelState.AddModelError(nameOfLong, $"{nameOfLong} cannot be less than or equal to zero.");
+                }
+
+                if (addRegionDto.Population < 0)
+                {
+                    var nameOfPopulation = nameof(addRegionDto.Population);
+                    ModelState.AddModelError(nameOfPopulation, $"{nameOfPopulation} cannot be less than zero.");
+                }
+
+                if(ModelState.ErrorCount > 0)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var regionDomain = _mapper.Map<Region>(addRegionDto);
                 var newRegion = await _regionsRepository.AddAsync(regionDomain);
 
                 var newRegionDto = _mapper.Map<RegionDto>(newRegion);
