@@ -79,19 +79,7 @@ namespace NZWalks.API.Controllers
                     var nameOfArea = nameof(addRegionDto.Area);
                     ModelState.AddModelError(nameOfArea, $"{nameOfArea} cannot be less than or equal to zero.");
                 }
-
-                if (addRegionDto.Lat <= 0)
-                {
-                    var nameOfLat = nameof(addRegionDto.Lat);
-                    ModelState.AddModelError(nameOfLat, $"{nameOfLat} cannot be less than or equal to zero.");
-                }
-
-                if (addRegionDto.Long <= 0)
-                {
-                    var nameOfLong = nameof(addRegionDto.Long);
-                    ModelState.AddModelError(nameOfLong, $"{nameOfLong} cannot be less than or equal to zero.");
-                }
-
+              
                 if (addRegionDto.Population < 0)
                 {
                     var nameOfPopulation = nameof(addRegionDto.Population);
@@ -139,11 +127,40 @@ namespace NZWalks.API.Controllers
 
         [HttpPut]
         [Route("{regionId:guid}")]
-        public async Task<IActionResult> UpdateRegionAsync(Guid regionId, [FromBody] UpdateRegionDto region)
+        public async Task<IActionResult> UpdateRegionAsync(Guid regionId, [FromBody] UpdateRegionDto updateRegionDto)
         {
             try
             {
-                var regionDomain = _mapper.Map<Region>(region);
+                if (updateRegionDto == null)
+                {
+                    ModelState.AddModelError(nameof(updateRegionDto), "Update Region Data is required.");
+                    return BadRequest(ModelState);
+                }
+
+                if (string.IsNullOrWhiteSpace(updateRegionDto.Code))
+                {
+                    var nameOfCode = nameof(updateRegionDto.Code);
+                    ModelState.AddModelError(nameOfCode, $"{nameOfCode} cannot be empty.");
+                }
+
+                if (updateRegionDto.Area <= 0)
+                {
+                    var nameOfArea = nameof(updateRegionDto.Area);
+                    ModelState.AddModelError(nameOfArea, $"{nameOfArea} cannot be less than or equal to zero.");
+                }
+
+                if (updateRegionDto.Population < 0)
+                {
+                    var nameOfPopulation = nameof(updateRegionDto.Population);
+                    ModelState.AddModelError(nameOfPopulation, $"{nameOfPopulation} cannot be less than zero.");
+                }
+
+                if (ModelState.ErrorCount > 0)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var regionDomain = _mapper.Map<Region>(updateRegionDto);
 
                 var updatedRegionDomain = await _regionsRepository.UpdateAsync(regionId, regionDomain);
 
