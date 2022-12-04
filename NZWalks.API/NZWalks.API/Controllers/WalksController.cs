@@ -130,6 +130,41 @@ namespace NZWalks.API.Controllers
         {
             try
             {
+                if (updateWalkDto == null)
+                {
+                    ModelState.AddModelError(nameof(updateWalkDto), $"{nameof(updateWalkDto)} cannot be empty.");
+                    return BadRequest(ModelState);
+                }
+
+                if (string.IsNullOrWhiteSpace(updateWalkDto.Name))
+                {
+                    ModelState.AddModelError(nameof(updateWalkDto.Name), $"{nameof(updateWalkDto.Name)} is required.");
+                }
+
+                if (updateWalkDto.Length <= 0)
+                {
+                    ModelState.AddModelError(nameof(updateWalkDto.Length), $"{nameof(updateWalkDto.Length)} should be greater than zero.");
+                }
+
+                var region = await _regionRepository.GetAsync(updateWalkDto.RegionId);
+
+                if (region == null)
+                {
+                    ModelState.AddModelError(nameof(updateWalkDto.RegionId), $"{nameof(updateWalkDto.RegionId)} RegionId is invalid.");
+                }
+
+                var walkDifficulty = await _walkDifficultyRepository.GetWalkDifficultyAsync(updateWalkDto.WalkDifficultyId);
+
+                if (walkDifficulty == null)
+                {
+                    ModelState.AddModelError(nameof(updateWalkDto.WalkDifficultyId), $"{nameof(updateWalkDto.WalkDifficultyId)} WalkDifficultyId is invalid.");
+                }
+
+                if (ModelState.ErrorCount > 0)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var walkToUpdate = _mapper.Map<Walk>(updateWalkDto);
                 var updatedWalk = await _walkRepository.UpdateWalkAsync(walkId, walkToUpdate);
                 var updatedWalkDto = _mapper.Map<UpdateWalkDto>(updatedWalk);
