@@ -46,13 +46,19 @@ namespace NZWalks.API.Controllers
             try
             {
                 var regionDomain = await _regionsRepository.GetAsync(regionId);
+
+                if(regionDomain == null)
+                {
+                    return NotFound("Region not found.");
+                }
+
                 var region = _mapper.Map<RegionDto>(regionDomain);
 
                 return Ok(region);
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
-                return NotFound("Region not found");
+                return StatusCode(500, ex.Message);
             }
         }
 

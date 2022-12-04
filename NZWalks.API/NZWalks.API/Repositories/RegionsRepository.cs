@@ -46,9 +46,9 @@ namespace NZWalks.API.Repositories
             return await _context.Regions.ToListAsync();
         }
 
-        public async Task<Region> GetAsync(Guid regionId)
+        public async Task<Region?> GetAsync(Guid regionId)
         {
-            return await _context.Regions.FirstOrDefaultAsync(region => region.Id == regionId) ?? throw new NullReferenceException("Region not found.");
+            return await _context.Regions.FirstOrDefaultAsync(region => region.Id == regionId);
         }
 
         public async Task<Region> UpdateAsync(Guid id, Region region)

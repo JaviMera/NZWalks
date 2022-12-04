@@ -44,9 +44,9 @@ namespace NZWalks.API.Repositories
             return await _context.WalksDifficulty.ToListAsync();
         }
 
-        public async Task<WalkDifficulty> GetWalkDifficultyAsync(Guid walkDifficultyId)
+        public async Task<WalkDifficulty?> GetWalkDifficultyAsync(Guid walkDifficultyId)
         {
-            return await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == walkDifficultyId) ?? throw new NullReferenceException("Walk Difficulty not found.");
+            return await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == walkDifficultyId);
         }
 
         public async Task<WalkDifficulty> UpdateAsync(Guid walkDifficultyId, WalkDifficulty walkDifficulty)

@@ -48,13 +48,15 @@ namespace NZWalks.API.Controllers
             try
             {
                 var walkDifficulty = await _repository.GetWalkDifficultyAsync(walkDifficultyId);
+
+                if(walkDifficulty == null)
+                {
+                    return NotFound("WalkDifficulty not found.");
+                }
+
                 var walkDifficultyDto = _mapper.Map<WalkDifficultyDto>(walkDifficulty);
 
                 return Ok(walkDifficultyDto);
-            }
-            catch (NullReferenceException exception)
-            {
-                return NotFound(exception.Message);
             }
             catch (Exception exception)
             {
