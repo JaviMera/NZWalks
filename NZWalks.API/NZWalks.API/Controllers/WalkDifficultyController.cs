@@ -85,14 +85,39 @@ namespace NZWalks.API.Controllers
         {
             try
             {
-                await _repository.DeleteWalkDifficultyAsync(walkDifficultyId);
-                return NoContent();                
+                var difficultyDeleted = await _repository.DeleteWalkDifficultyAsync(walkDifficultyId);
+                var difficultyDeletedDto = _mapper.Map<WalkDifficultyDto>(difficultyDeleted);
+
+                return Ok(difficultyDeletedDto);
             }
             catch(NullReferenceException exception)
             {
                 return NotFound(exception.Message);
             }
             catch (Exception exception)
+            {
+                return StatusCode(500, exception.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("{walkDifficultyId:guid}")]
+        public async Task<IActionResult> UpdateWalkDifficultyAsync(Guid walkDifficultyId, [FromBody] UpdateWalkDifficultyDto walkDifficulty)
+        {
+            try
+            {
+                var walkDifficultyDomain = _mapper.Map<WalkDifficulty>(walkDifficulty);
+
+                var updatedWalkDifficulty = await _repository.UpdateAsync(walkDifficultyId, walkDifficultyDomain);
+                var updatedWalkDifficultyDto = _mapper.Map<WalkDifficultyDto>(updatedWalkDifficulty);
+
+                return Ok(updatedWalkDifficultyDto);
+            }
+            catch (NullReferenceException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch(Exception exception)
             {
                 return StatusCode(500, exception.Message);
             }

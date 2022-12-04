@@ -8,5 +8,6 @@ namespace NZWalks.API.Repositories
         Task<WalkDifficulty> GetWalkDifficultyAsync(Guid walkDifficultyId);
         Task<WalkDifficulty> AddWalkDifficulty(WalkDifficulty walkDifficulty);
         Task<WalkDifficulty> DeleteWalkDifficultyAsync(Guid walkDifficultyId);
+        Task<WalkDifficulty> UpdateAsync(Guid walkDifficultyId, WalkDifficulty walkDifficulty);
     }
 }

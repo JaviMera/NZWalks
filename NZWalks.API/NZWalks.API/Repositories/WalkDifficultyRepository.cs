@@ -48,5 +48,19 @@ namespace NZWalks.API.Repositories
         {
             return await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == walkDifficultyId) ?? throw new NullReferenceException("Walk Difficulty not found.");
         }
+
+        public async Task<WalkDifficulty> UpdateAsync(Guid walkDifficultyId, WalkDifficulty walkDifficulty)
+        {
+            var walkDifficultyToUpdate = await _context.WalksDifficulty.FirstOrDefaultAsync(x => x.Id == walkDifficultyId);
+
+            if(walkDifficultyToUpdate == null)
+            {
+                throw new NullReferenceException("Walk Difficulty not found.");
+            }
+
+            walkDifficultyToUpdate.Code = walkDifficulty.Code;
+            await _context.SaveChangesAsync();
+            return walkDifficultyToUpdate;
+        }
     }
 }
