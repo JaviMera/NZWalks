@@ -68,23 +68,7 @@ namespace NZWalks.API.Controllers
         public async Task<IActionResult> AddWalkDifficultyAsync([FromBody] AddWalktDifficultyDto addWalkDifficultyDto)
         {
             try
-            {
-                if (addWalkDifficultyDto == null)
-                {
-                    ModelState.AddModelError(nameof(addWalkDifficultyDto), $"{nameof(addWalkDifficultyDto)} is required.");
-                    return BadRequest(ModelState);
-                }
-
-                if (string.IsNullOrWhiteSpace(addWalkDifficultyDto.Code))
-                {
-                    ModelState.AddModelError(nameof(addWalkDifficultyDto.Code), $"{nameof(addWalkDifficultyDto.Code)} cannot be empty.");
-                }
-
-                if(ModelState.ErrorCount > 0)
-                {
-                    return BadRequest(ModelState);
-                }
-
+            {               
                 var walkDifficultyDomain = _mapper.Map<WalkDifficulty>(addWalkDifficultyDto);
                 var newWalkDifficulty = await _repository.AddWalkDifficulty(walkDifficultyDomain);
                 var newWalkDifficultyDto = _mapper.Map<WalkDifficultyDto>(newWalkDifficulty);
@@ -124,22 +108,6 @@ namespace NZWalks.API.Controllers
         {
             try
             {
-                if (updateWalkDifficulty == null)
-                {
-                    ModelState.AddModelError(nameof(updateWalkDifficulty), $"{nameof(updateWalkDifficulty)} is required.");
-                    return BadRequest(ModelState);
-                }
-
-                if (string.IsNullOrWhiteSpace(updateWalkDifficulty.Code))
-                {
-                    ModelState.AddModelError(nameof(updateWalkDifficulty.Code), $"{nameof(updateWalkDifficulty.Code)} cannot be empty.");
-                }
-
-                if (ModelState.ErrorCount > 0)
-                {
-                    return BadRequest(ModelState);
-                }
-
                 var walkDifficultyDomain = _mapper.Map<WalkDifficulty>(updateWalkDifficulty);
 
                 var updatedWalkDifficulty = await _repository.UpdateAsync(walkDifficultyId, walkDifficultyDomain);
