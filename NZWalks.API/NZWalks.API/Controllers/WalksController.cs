@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
@@ -28,6 +29,7 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]        
         public async Task<IActionResult> GetAllWalksAsync()
         {
             try
@@ -48,8 +50,9 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]
         [Route("{walkId:guid}")]
-        [ActionName("GetWalkAsync")]
+        [ActionName("GetWalkAsync")]        
         public async Task<IActionResult> GetWalkAsync(Guid walkId)
         {
             try
@@ -71,6 +74,7 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> AddWalkAsync([FromBody] AddWalkDto addWalkDto)
         {
             try
@@ -123,9 +127,10 @@ namespace NZWalks.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        
         [HttpPut]
-        [Route("{walkId:guid}")]
+        [Authorize(Roles = "writer")]
+        [Route("{walkId:guid}")]       
         public async Task<IActionResult> UpdateWalkAsyn(Guid walkId, [FromBody] UpdateWalkDto updateWalkDto)
         {
             try
@@ -163,7 +168,8 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpDelete]
-        [Route("{walkId:guid}")]
+        [Authorize(Roles = "writer")]
+        [Route("{walkId:guid}")]        
         public async Task<IActionResult> DeleteWalkAsync(Guid walkId)
         {
             try

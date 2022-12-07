@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NZWalks.API.Data;
 
@@ -11,9 +12,10 @@ using NZWalks.API.Data;
 namespace NZWalks.API.Migrations
 {
     [DbContext(typeof(NZWalksDbContext))]
-    partial class NZWalksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221207145445_adding users")]
+    partial class addingusers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,18 +68,6 @@ namespace NZWalks.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("589382f2-19bc-4fa9-b457-3e952fe5a264"),
-                            Name = "writer"
-                        },
-                        new
-                        {
-                            Id = new Guid("f7970f5f-113c-4b42-a5e0-5e8ac0c828d3"),
-                            Name = "reader"
-                        });
                 });
 
             modelBuilder.Entity("NZWalks.API.Models.Domain.User", b =>
@@ -109,26 +99,6 @@ namespace NZWalks.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("53e4baf5-aa77-497a-9993-e1c2327f065f"),
-                            EmailAddress = "joe@doe.com",
-                            FirstName = "Joe",
-                            LastName = "Doe",
-                            Password = "sdFD78s.s#*Flfs-ww",
-                            Username = "joedoe"
-                        },
-                        new
-                        {
-                            Id = new Guid("f8027c67-58b6-465f-9a25-39775e7a1a69"),
-                            EmailAddress = "joeline@doelina.com",
-                            FirstName = "Joelina",
-                            LastName = "Doeina",
-                            Password = "sdFD78s.s#*Flfs-ww",
-                            Username = "joelinadoelina"
-                        });
                 });
 
             modelBuilder.Entity("NZWalks.API.Models.Domain.User_Role", b =>
@@ -150,20 +120,6 @@ namespace NZWalks.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("User_Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("f76a79c7-d2d7-427d-ba7f-14b33bb5fe8e"),
-                            RoleId = new Guid("f7970f5f-113c-4b42-a5e0-5e8ac0c828d3"),
-                            UserId = new Guid("53e4baf5-aa77-497a-9993-e1c2327f065f")
-                        },
-                        new
-                        {
-                            Id = new Guid("3c9a62de-94c0-4743-955d-e763341f7845"),
-                            RoleId = new Guid("589382f2-19bc-4fa9-b457-3e952fe5a264"),
-                            UserId = new Guid("f8027c67-58b6-465f-9a25-39775e7a1a69")
-                        });
                 });
 
             modelBuilder.Entity("NZWalks.API.Models.Domain.Walk", b =>

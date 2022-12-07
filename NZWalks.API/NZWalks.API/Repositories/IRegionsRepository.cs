@@ -1,4 +1,5 @@
-﻿using NZWalks.API.Models.Domain;
+﻿using Microsoft.IdentityModel.Tokens;
+using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Repositories
 {
