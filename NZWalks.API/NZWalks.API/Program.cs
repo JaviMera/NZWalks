@@ -42,10 +42,8 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddDbContext<NZWalksDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalks"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
 });
-
-builder.Services.AddTransient<DataSeeder>();
 
 builder.Services.AddScoped<IRegionsRepository, RegionsRepository>();
 builder.Services.AddScoped<IWalkRepository, WalkRepository>();

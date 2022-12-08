@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Models.Domain;
-using System.Xml;
 
 namespace NZWalks.API.Data
 {
@@ -71,6 +70,15 @@ namespace NZWalks.API.Data
                 RoleId = writerRole.Id,
                 UserId = writerUser.Id
             });
+
+            var regions = LocalData.GetRegions();
+            modelBuilder.Entity<Region>().HasData(regions);
+
+            var walkDifficulties = LocalData.GetWalkDifficulties();
+            modelBuilder.Entity<WalkDifficulty>().HasData(walkDifficulties);
+
+            var walks = LocalData.GetWalks(regions, walkDifficulties);
+            modelBuilder.Entity<Walk>().HasData(walks);
         }
 
         public DbSet<Region> Regions { get; set; }
