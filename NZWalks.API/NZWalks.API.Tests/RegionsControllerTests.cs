@@ -16,36 +16,54 @@ namespace NZWalks.API.Tests
 {
     public class RegionsControllerTests
     {
-        [Test]
-        public async Task GetRegions()
+        private IMapper _fakeMapper;
+        private RegionsController _registrationController;
+
+        [SetUp]
+        public void SetUp()
         {
             var config = new MapperConfiguration(options =>
             {
                 options.AddProfile<RegionsProfile>();
             });
 
-            var fakeRegions = new List<Region>
-            {
-                new Region
-                { 
-                    Id = Guid.NewGuid(),
-                    Area = 10, Code = "ABCD", Lat = 12, Long = 12, Name = "Fake Region", Population = 10000
-                }
-            };
+            _fakeMapper = config.CreateMapper();
+        }
+
+        [Test]
+        public async Task GetRegions_ReturnsRegions()
+        {
+            // Arrange
+            var fakeRegions = CreateRegions();
 
             var mockRegionsRepository = new Mock<IRegionsRepository>();
             mockRegionsRepository.Setup(x => x.GetAllAsync())
                 .ReturnsAsync(fakeRegions);
 
-            var regionsController = new RegionsController(mockRegionsRepository.Object, config.CreateMapper());
+            var regionsController = new RegionsController(mockRegionsRepository.Object, _fakeMapper);
 
+            // Act
             var result = await regionsController.GetAllRegionsAsync() as OkObjectResult;
 
+
+            // Assert
             Assert.IsTrue(result!.StatusCode == 200, $"Code was {result.StatusCode}");
             Assert.IsTrue(result.Value is List<RegionDto>);
 
             var regions = result.Value as List<RegionDto>; 
             Assert.IsTrue(regions!.Count > 0);
          }
+
+        private List<Region> CreateRegions()
+        {
+            return new List<Region>
+            {
+                new Region
+                {
+                    Id = Guid.NewGuid(),
+                    Area = 10, Code = "ABCD", Lat = 12, Long = 12, Name = "Fake Region", Population = 10000
+                }
+            };
+        }
     }
 }
