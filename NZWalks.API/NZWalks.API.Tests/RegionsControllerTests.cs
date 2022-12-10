@@ -17,7 +17,6 @@ namespace NZWalks.API.Tests
     public class RegionsControllerTests
     {
         private IMapper _fakeMapper;
-        private RegionsController _registrationController;
 
         [SetUp]
         public void SetUp()
@@ -31,7 +30,7 @@ namespace NZWalks.API.Tests
         }
 
         [Test]
-        public async Task GetRegions_ReturnsRegions()
+        public async Task GetRegions_Returns200()
         {
             // Arrange
             var fakeRegions = CreateRegions();
