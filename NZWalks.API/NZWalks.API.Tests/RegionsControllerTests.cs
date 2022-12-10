@@ -53,6 +53,28 @@ namespace NZWalks.API.Tests
             Assert.IsTrue(regions!.Count > 0);
          }
 
+        [Test]
+        public async Task GetRegions_WithEmptyList_Returns204()
+        {
+            // Assert
+            var fakeRegions = new List<Region>();
+
+            var mockRegionsRepository = new Mock<IRegionsRepository>();
+            mockRegionsRepository.Setup(x => x.GetAllAsync())
+                .ReturnsAsync(fakeRegions);
+
+            var regionsController = new RegionsController(mockRegionsRepository.Object, _fakeMapper);
+
+            // Act
+            var result = await regionsController.GetAllRegionsAsync();
+
+            // Assert
+            Assert.IsInstanceOf<NoContentResult>(result);
+
+            var noContentResult = result as NoContentResult;
+            Assert.IsTrue(noContentResult!.StatusCode == 204, $"Expected 204 Code was {noContentResult!.StatusCode}");           
+        }
+
         private List<Region> CreateRegions()
         {
             return new List<Region>
