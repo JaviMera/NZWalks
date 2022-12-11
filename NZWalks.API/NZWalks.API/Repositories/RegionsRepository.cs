@@ -14,8 +14,7 @@ namespace NZWalks.API.Repositories
         }
 
         public async Task<Region> AddAsync(Region region)
-        {
-            region.Id = Guid.NewGuid();
+        {            
             await _context.Regions.AddAsync(region);
             await _context.SaveChangesAsync();            
             return region;

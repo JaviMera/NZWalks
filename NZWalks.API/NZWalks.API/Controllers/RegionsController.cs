@@ -72,6 +72,8 @@ namespace NZWalks.API.Controllers
             try
             {              
                 var regionDomain = _mapper.Map<Region>(addRegionDto);
+                regionDomain.Id = Guid.NewGuid();
+
                 var newRegion = await _regionsRepository.AddAsync(regionDomain);
 
                 var newRegionDto = _mapper.Map<RegionDto>(newRegion);
